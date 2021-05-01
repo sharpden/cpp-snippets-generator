@@ -436,6 +436,8 @@ auto t1 = chrono::high_resolution_clock::now();
 cerr << chrono::duration_cast<chrono::duration<double>>(t1 - t0).count() << " s" << endl;
 ================================================================================
 // #debug
+#ifndef ONLINE_JUDGE
+
 void __print(int x) { cerr << x; }
 void __print(long x) { cerr << x; }
 void __print(long long x) { cerr << x; }
@@ -453,14 +455,37 @@ void __print(bool x) { cerr << (x ? "true" : "false"); }
 template<typename T, typename V>
 void __print(pair<T, V> const& x) { cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}'; }
 template<typename T>
-void __print(T const& x) { int f = 0; cerr << '{'; for (auto& i: x) { cerr << (f++ ? "," : ""), __print(i); } cerr << "}"; }
-void _print() { cerr << "]\n"; }
+void __print(T const& x) { int f = 0; cerr << '{'; for (auto& i : x) { cerr << (f++ ? "," : ""), __print(i); } cerr << "}"; }
+
+template<typename T>
+void _print_name(char const *name, T&& t) { cerr << name << " = "; __print(t); cerr << "\n"; }
 template<typename T, typename... V>
-void _print(T&& t, V&&... v) {__print(t); if (sizeof...(v)) { cerr << ", "; _print(v...); } }
-#ifndef ONLINE_JUDGE
-#define debug(x...) do { cerr << "[" << #x << "] = ["; _print(x); } while (0)
+void _print_name(char const *name, T&& t, V&&... v) {
+    cerr << name << " = "; __print(t);
+    if (sizeof...(v)) { cerr << "  "; }
+    _print_name(v...);
+}
+
+#define debug_1(x1)                     _print_name(#x1, x1)
+#define debug_2(x1, x2)                 _print_name(#x1, x1, #x2, x2)
+#define debug_3(x1, x2, x3)             _print_name(#x1, x1, #x2, x2, #x3, x3)
+#define debug_4(x1, x2, x3, x4)         _print_name(#x1, x1, #x2, x2, #x3, x3, #x4, x4)
+#define debug_5(x1, x2, x3, x4, x5)     _print_name(#x1, x1, #x2, x2, #x3, x3, #x4, x4, #x5, x5)
+#define debug_6(x1, x2, x3, x4, x5, x6) _print_name(#x1, x1, #x2, x2, #x3, x3, #x4, x4, #x5, x5, #x6, x6)
+
+// use 'Zc:preprocessor' in MSVC
+#define CAT_(a, b) a ## b
+#define CAT(a, b) CAT_(a, b)
+#define NARGS(...)  INTERNAL_EXPAND_ARGS_PRIVATE(INTERNAL_ARGS_AUGMENTER(__VA_ARGS__))
+#define INTERNAL_ARGS_AUGMENTER(...) unused, __VA_ARGS__
+#define INTERNAL_EXPAND(x) x
+#define INTERNAL_EXPAND_ARGS_PRIVATE(...) INTERNAL_EXPAND(INTERNAL_GET_ARG_COUNT_PRIVATE(__VA_ARGS__, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
+#define INTERNAL_GET_ARG_COUNT_PRIVATE(_1_, _2_, _3_, _4_, _5_, _6_, _7_, _8_, _9_, _10_, _11_, _12_, _13_, _14_, _15_, _16_, _17_, _18_, _19_, _20_, count, ...) count
+
+#define debug(...) do { CAT(debug_, NARGS(__VA_ARGS__))(__VA_ARGS__); } while (0)
+
 #else
-#define debug(x...)
+#define debug(...)
 #endif
 $end$
 ================================================================================
