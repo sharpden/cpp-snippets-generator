@@ -1,0 +1,5 @@
+folders = {
+    'VS': "~\\Documents\\Visual Studio 2019\\Code Snippets\\Visual C++\\My Code Snippets\\",
+    'VSCODE': "~\\AppData\\Roaming\\Code\\User\\snippets\\",
+    'SUBLIME': "~\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\",
+}
