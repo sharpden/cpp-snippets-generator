@@ -454,6 +454,12 @@ void __print(bool x) { cerr << (x ? "true" : "false"); }
 
 template<typename T, typename V>
 void __print(pair<T, V> const& x) { cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}'; }
+template<int... Is, typename... Ts>
+void __print(tuple<Ts...> const& x, integer_sequence<size_t, Is...> tag) {
+    int dummy[] = {((Is ? (cerr << ",", 0) : 0), __print(get<Is>(x)), 0)...};
+}
+template<typename... Ts>
+void __print(tuple<Ts...> const& x) { cerr << '{'; __print(x, make_index_sequence<sizeof...(Ts)>{}); cerr << '}'; }
 template<typename T>
 void __print(T const& x) { int f = 0; cerr << '{'; for (auto& i : x) { cerr << (f++ ? "," : ""), __print(i); } cerr << "}"; }
 
@@ -626,4 +632,16 @@ vector<pair<int, int>> kuhn(int npart1, int npart2, vector<vector<int>> const& a
 	return result;
 }
 
+$end$
+================================================================================
+// #cumsum
+template<typename T>
+vector<T> cumsum(vector<T> const& a) {
+	size_t n = a.size();
+	vector<T> result(n + 1);
+	for (int i = 0; i < n; ++i) {
+		result[i + 1] = result[i] + a[i];
+	}
+	return result;
+}
 $end$
