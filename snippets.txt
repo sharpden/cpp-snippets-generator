@@ -467,9 +467,9 @@ template<typename T>
 void _print_name(char const *name, T&& t) { cerr << name << " = "; __print(t); cerr << "\n"; }
 template<typename T, typename... V>
 void _print_name(char const *name, T&& t, V&&... v) {
-    cerr << name << " = "; __print(t);
+    cerr << name << " = "; __print(forward<T>(t));
     if (sizeof...(v)) { cerr << "  "; }
-    _print_name(v...);
+    _print_name(forward<V>(v)...);
 }
 
 #define debug_1(x1)                     _print_name(#x1, x1)
@@ -643,5 +643,26 @@ vector<T> cumsum(vector<T> const& a) {
 		result[i + 1] = result[i] + a[i];
 	}
 	return result;
+}
+$end$
+================================================================================
+// #dp
+template<typename T> bool updmax(T& lhs, T const& rhs) { if (rhs > lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmin(T& lhs, T const& rhs) { if (rhs < lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmaxeq(T& lhs, T const& rhs) { if (rhs >= lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmineq(T& lhs, T const& rhs) { if (rhs <= lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmax(T& lhs, T const& rhs, T const& guard) { if (lhs == guard || rhs > lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmin(T& lhs, T const& rhs, T const& guard) { if (lhs == guard || rhs < lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmaxeq(T& lhs, T const& rhs, T const& guard) { if (lhs == guard || rhs >= lhs) { lhs = rhs; return true; } return false; }
+template<typename T> bool updmineq(T& lhs, T const& rhs, T const& guard) { if (lhs == guard || rhs <= lhs) { lhs = rhs; return true; } return false; }
+
+template<typename T, size_t N> struct make_nd_type { using type = vector<typename make_nd_type<T, N - 1>::type>; };
+template<typename T> struct make_nd_type<T, 0> { using type = T; };
+template<typename T, size_t N> using make_nd_t = typename make_nd_type<T, N>::type;
+template<typename T> auto make_nd(T&& value) -> T { return value; }
+template<typename T, typename... TArgs>
+auto make_nd(T&& value, size_t index, TArgs... indices) -> make_nd_t<T, 1 + sizeof...(TArgs)> {
+    static_assert(conjunction_v<is_convertible<TArgs, size_t>...>);
+    return make_nd_t<T, 1 + sizeof...(TArgs)>(index, make_nd<T>(forward<T>(value), indices...));
 }
 $end$
