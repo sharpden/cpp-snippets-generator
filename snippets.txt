@@ -281,6 +281,7 @@ vector<vector<int>> mpow(int n, vector<vector<int>> a, int64_t power) {
         a = mmul(n, a, a);
         power /= 2;
     }
+    return result;
 }
 $end$
 ================================================================================
@@ -328,7 +329,7 @@ vector<string> $end$
 vector<int64_t> $end$
 ================================================================================
 // #shi
-int shi[] = {-1, 0, 1, 0}, shj[] = {0, 1, 0, -1};
+int const shi[] = {-1, 0, 1, 0}, shj[] = {0, 1, 0, -1};
 ================================================================================
 // #ninj
 for (int dir = 0; dir < 4; ++dir) {
@@ -666,3 +667,7 @@ auto make_nd(T&& value, size_t index, TArgs... indices) -> make_nd_t<T, 1 + size
     return make_nd_t<T, 1 + sizeof...(TArgs)>(index, make_nd<T>(forward<T>(value), indices...));
 }
 $end$
+================================================================================
+// #stack_codeforces
+#pragma comment(linker, "/STACK:268435456")
+================================================================================
